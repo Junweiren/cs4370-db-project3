@@ -328,8 +328,40 @@ public class Table
      */
     public Table i_join (String attributes1, String attributes2, Table table2)
     {
-        return null;
-    } // i_join
+        List <Comparable []> rows = new ArrayList <> ();
+        int counter = 0;
+        int attIndex1 = -1;
+        int attIndex2 = -1;
+        Map <KeyType, Comparable []> firstIndex = index;
+        Map <KeyType, Comparable []> secondIndex = table2.index;
+        for(String att: this.attribute){
+            if(att.equals(attributes1)){
+                attIndex1 = counter;
+                counter = 0;
+                break;
+            }
+            counter++;
+        }
+        for(String att: table2.attribute){
+            if(att.equals(attributes2)){
+                attIndex2 = counter;
+                break;
+            }
+            counter++;
+        }
+
+        for (KeyType key : index.keySet())
+        {
+            Comparable [] tuple = firstIndex.get(key);
+            for(int i = 0; i < table2.tuples.size(); i++){
+                if(tuple[attIndex1].equals(table2.tuples.get(i)[attIndex2])){
+                    rows.add(ArrayUtil.concat(tuple, table2.tuples.get(i)));
+                }
+            }
+        }
+        return new Table (name + count++, ArrayUtil.concat (attribute, table2.attribute),
+                ArrayUtil.concat (domain, table2.domain), key, rows);
+    }
 
     /************************************************************************************
      * Join this table and table2 by performing an "equi-join".  Same as above, but implemented
