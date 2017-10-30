@@ -68,8 +68,8 @@ public class Table
     /** The map type to be used for indices.  Change as needed.
      */
 //    private static final MapType mType = MapType.TREE_MAP;
-//    private static final MapType mType = MapType.BPTREE_MAP;
-    private static final MapType mType = MapType.LINHASH_MAP;
+    private static final MapType mType = MapType.BPTREE_MAP;
+//    private static final MapType mType = MapType.LINHASH_MAP;
 
     /************************************************************************************
      * Make a map (index) given the MapType.
@@ -351,35 +351,27 @@ public class Table
             List <Comparable []> rows = new ArrayList <> ();
             //  T O   B E   I M P L E M E N T E D
             //TODO h_join command
+
             int[] cols1 = match(t_attrs);
             int[] cols2 = table2.match(u_attrs);
 
-            Table smallTable = (this.tuples.size() > table2.tuples.size())? table2 : this;
-            String[]  smallTableAttrs = (this.tuples.size() > table2.tuples.size())? u_attrs : t_attrs;
+//            Table smallTable = (this.tuples.size() > table2.tuples.size())? table2 : this;
+//            String[]  smallTableAttrs = (this.tuples.size() > table2.tuples.size())? u_attrs : t_attrs;
             Map<KeyType, Comparable[]> commonAttrMap = makeMap();
 
-            for(int i=0; i < smallTable.tuples.size(); i++ ) {
-                Comparable[] currentTuple = smallTable.tuples.get(i);
-                Comparable[] commonAttrsValues = smallTable.extract(currentTuple, smallTableAttrs);
-                if (commonAttrMap.containsKey(commonAttrsValues)) {
-                    commonAttrMap.get(commonAttrsValues);
-                }else{
-                    commonAttrMap.put(commonAttrsValues, currentTuple);
-                }
+            for(int i=0; i < table2.tuples.size(); i++ ) {
+                Comparable[] currentTuple = table2.tuples.get(i);
+                Comparable[] commonAttrsValues = table2.extract(currentTuple, u_attrs);
+
+                commonAttrMap.put(new KeyType(commonAttrsValues), currentTuple);
 
             }
             for(int i = 0; i < tuples.size(); i++) {    //for each rows in table1, compare it with
-                for (int j = 0; j < table2.tuples.size(); j++) {    //each rows in table2
-                    boolean attrsValuesEqual = true;
-                    for (int k = 0; k < cols1.length; k++) {    // compare with each attribute
-                        if (!tuples.get(i)[cols1[k]].equals(table2.tuples.get(j)[cols2[k]])) {
-                            attrsValuesEqual = false;
-                            break;
-                        }
-                    }
-                    if(attrsValuesEqual) {
-                        rows.add(ArrayUtil.concat(tuples.get(i), table2.tuples.get(j)));
-                    }
+                Comparable[] currentTuple = tuples.get(i);
+                Comparable[] foreignKeys = extract(currentTuple, t_attrs);
+                if (commonAttrMap.containsKey(new KeyType(foreignKeys))) {
+                    out.println("contains key: " + foreignKeys.toString());
+                    rows.add(ArrayUtil.concat(tuples.get(i), commonAttrMap.get(new KeyType(foreignKeys))));
                 }
             }
             for (int i = 0; i < cols2.length; i++) {

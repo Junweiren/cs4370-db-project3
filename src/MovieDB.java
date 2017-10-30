@@ -135,7 +135,7 @@ class MovieDB
         //--------------------- equi-join: movie JOIN studio ON studioName = name
 
         out.println ();
-        Table t_join = movie.join ("studioName", "name", studio);
+        Table t_join = movie.h_join ("studioName", "name", studio);
         t_join.print ();
 
         //--------------------- natural join: movie JOIN studio

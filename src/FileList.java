@@ -73,20 +73,20 @@ public class FileList
      */
     public boolean add (Comparable [] tuple)
     {
-        byte [] record = null;  // FIX: table.pack (tuple);
-
-        record = Table.convertTupleToByteArray(tuple, recordSize, domain);
-        if (record.length != recordSize) {
-            out.println ("FileList.add: wrong record size " + record.length);
-            return false;
-        } // if
-
-        try {
-            file.seek(nRecords * recordSize);
-            file.write(record);
-            nRecords++;
-        } catch (IOException e) {
-        }
+//        byte [] record = null;  // FIX: table.pack (tuple);
+//
+//        record = Table.convertTupleToByteArray(tuple, recordSize, domain);
+//        if (record.length != recordSize) {
+//            out.println ("FileList.add: wrong record size " + record.length);
+//            return false;
+//        } // if
+//
+//        try {
+//            file.seek(nRecords * recordSize);
+//            file.write(record);
+//            nRecords++;
+//        } catch (IOException e) {
+//        }
 
         return true;
     } // add
@@ -107,7 +107,7 @@ public class FileList
         } catch (IOException e) {
         }
 
-        return Table.convertByteArrayToTuple(record, recordSize, domain);   // FIX: table.unpack (record);
+        return null;// Table.convertByteArrayToTuple(record, recordSize, domain);   // FIX: table.unpack (record);
     } // get
 
     /***************************************************************************

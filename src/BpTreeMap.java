@@ -394,54 +394,237 @@ public class BpTreeMap <K extends Comparable <K>, V>
      * @return  the newly allocated right sibling node of n 
      */
     @SuppressWarnings("unchecked")
-    private Node insert (K key, V ref, Node n)
-    {
-        out.println ("=============================================================");
-        out.println ("insert: key = " + key);
-        out.println ("=============================================================");
+    private Node insert (K key, V ref, Node n){
 
-        Node rt = null;                                                      // holder for right sibling
-        
-        if (n.isLeaf) {                                                      // handle leaf node level
-
-            if (n.nKeys < ORDER - 1) {                                       // current node is not full
-                wedge (key, ref, n, n.find (key), true);                     // wedge (key, ref) pair in at position i
-            } else {                                                         // current node is full
-                rt = split (key, ref, n, true);                              // split current node, return right sibling
-                n.ref[n.nKeys] = rt;                                         // link leaf n to leaf rt
-                if (n == root && rt != null) {
-                    root = makeRoot (n, n.key[n.nKeys-1], rt);               // make a new root
-                } else if (rt != null) {
-                    hasSplit = true;                                         // indicate an unhandled split
-                } // if
+    boolean inserted = false;
+        if (n.isLeaf) {                                  // handle leaf node
+    if (n.nKeys < ORDER - 1) {//enough space to insert into this node
+        for (int i = 0; i < n.nKeys; i++) {
+            K k_i = n.key [i];
+            if (key.compareTo (k_i) < 0) {//the position to insert
+                wedgeL (key, ref, n, i);//wedge the leafnode n to add <key,ref>
+                inserted = true;
+                break;
+            } else if (key.equals (k_i)) {
+                out.println ("BpTreeMap.insert: attempt to insert duplicate key = "+key);
+                inserted = true;
+                break;
             } // if
+        } // for
+        if (! inserted) wedgeL (key, ref, n, n.nKeys);//'wedge' to the right
+        return null; // handled, nothing to return.
+    } else {//not enough space
+        if (find(key,n) != null) {//check if duplicate key or not before split
+            out.println ("BpTreeMap.insert: attempt to insert duplicate key = " + key);
+            return null; // handled, nothing to return
+        }
+        Node sib = splitL (key, ref, n);//split leaf and insert to the correct place
+        //  T O   B E   I M P L E M E N T E D
+        if (n == root) {//n is both leaf and root, create new root
+            Node newRoot = new Node(ORDER, false);
+            newRoot.nKeys = 1;
+            newRoot.key[0] = n.key[n.nKeys-1];
+            newRoot.ref[0] = n;
+            newRoot.ref[1] = sib;
+            root = newRoot;
+            return null;
+        }
+        Node toReturn = new Node(ORDER, false);
+        toReturn.nKeys = 1;
+        toReturn.ref[0] = n;
+        toReturn.ref[1] = sib;
+        toReturn.key[0] = n.key[n.nKeys-1];
+        return toReturn;
+        // IMPLIMENTATION DONE
+    } // if-else to check enough space to insert k to a leaf node or not.
 
-        } else {                                                             // handle internal node level
+} else {                                         // handle internal node
+    //  T O   B E   I M P L E M E N T E D
+    //find the correct children to insert
+    int i=0;
+    for (; i<n.nKeys; i++) {
+        K k_i = n.key[i];
+        if (key.compareTo(k_i)<=0) break;
+    }
 
-            int i = n.find (key);                                            // find "<=" position
-            rt = insert (key, ref, (Node) n.ref[i]);                         // recursive call to insert
-            if (DEBUG) out.println ("insert: handle internal node level");
-                //TODO 6   I M P L E M E N T E D
-            Node lnode = (Node) n.ref[i];
-            if(rt == null) {
-                return null;
-            }
-                if (n.nKeys < ORDER - 1) {            // if the node is not full call wedge
-                    wedge(lnode.key[lnode.nKeys-1], rt, n, i, false);
-                } else {
-                    Node nrt = split(lnode.key[lnode.nKeys-1], rt, n, false);
-                    if(n == root && nrt != null){
-                        root = makeRoot(n, n.key[n.nKeys-1], nrt);
-                        return null;
-                    }
-                }
+    //recursively call insert
+    Node gift = insert(key,ref,(Node)n.ref[i]);
 
+    //if no gift received, just return null.
+    if (gift==null) return null;//nothing to return up
 
-        } // if
+    //a gift is received from the lower level, needs to handle it.
+    K giftKey = gift.key[0];
+    Node giftRef = (Node) gift.ref[1];
 
-        if (DEBUG) print (root, 0);
-        return rt;                                                           // return right node
-    } // insert
+    //if enough space, insert into this node
+    inserted = false;
+    if (n.nKeys < ORDER - 1) {
+        for (i=0; i < n.nKeys; i++) {
+            K k_i = n.key[i];
+            if (key.compareTo (k_i) < 0) {//the position to insert
+                wedgeI (giftKey, giftRef, n, i);//wedge to add <key,ref>
+                inserted = true;
+                break;
+            } // if
+        } // for
+        if (! inserted) wedgeI (giftKey, giftRef, n, n.nKeys);//'wedge' to the right
+        return null; // no gift to return
+    }
+
+    //not enough space, split leaf and insert <K,V> to the correct place
+    Node sib = splitI (giftKey, giftRef, n);
+    //if n is the root, create new root
+    if (n == root) {
+        Node newRoot = new Node(1,false);
+        newRoot.nKeys = 1;//new root has 1 key and 2 children: n and sib.
+        newRoot.key[0] = n.key[n.nKeys];//the hidden key
+        newRoot.ref[0] = n;
+        newRoot.ref[1] = sib;
+        root = newRoot;
+        return null;
+    }
+    //n is not the root, create a gift to the upper level
+    Node toReturn = new Node(1,false);
+    toReturn.nKeys = 1;
+    toReturn.key[0] = n.key[n.nKeys];//the hidden key
+    toReturn.ref[0] = n;
+    toReturn.ref[1] = sib;
+    return toReturn;
+    // IMPLIMENTATION DONE.
+} // if
+} // insert
+
+    /********************************************************************************
+     * Wedge the key-ref pair into leaf node n.
+     * @param key  the key to insert
+     * @param ref  the value/node to insert
+     * @param n    the current node
+     * @param i    the insertion position within node n
+     */
+    private void wedgeL (K key, V ref, Node n, int i){
+        //Implemented: handle the nextLeaf pointer
+        n.ref[n.nKeys+1] = n.ref[n.nKeys];
+        //Implementation done.
+        for (int j = n.nKeys; j > i; j--) {
+            n.key [j] = n.key [j-1];
+            n.ref [j] = n.ref [j-1];
+        } // for
+        n.key [i] = key;
+        n.ref [i] = ref;
+        n.nKeys++;
+    } // wedgeL
+
+    /********************************************************************************
+     * Wedge the key-ref pair into internal node n.
+     * @param key  the key to insert
+     * @param ref  the value/node to insert
+     * @param n    the current node
+     * @param i    the insertion position within node n
+     */
+    private void wedgeI (K key, Node ref, Node n, int i) {
+        //  T O   B E   I M P L E M E N T E D
+        for (int j = n.nKeys; j > i; j--) {
+            n.key [j] = n.key [j-1];
+            n.ref [j+1] = n.ref [j];
+        } // for
+        n.key [i] = key;
+        n.ref [i+1] = ref;
+        n.nKeys++;
+    } // wedgeI
+
+    /********************************************************************************
+     * Split leaf node n and return the newly created right sibling node rt.
+     * Split first (MID keys for both node n and node rt), then add the new key and ref.
+     * @param key  the new key to insert
+     * @param ref  the new value/node to insert
+     * @param n    the current node
+     * @return  the right sibling node (may wish to provide more information)
+     */
+    private Node splitL (K key, V ref, Node n) {
+        Node rt = new Node (ORDER, true);
+        //  T O   B E   I M P L E M E N T E D
+        n.nKeys = MID;//2, truncate n's keys
+        rt.nKeys = MID;//2, assign rt MID keys
+        //copy the second half of n to rf
+        for (int i=0; i<MID; i++) {
+            rt.ref[i]=n.ref[MID+i];
+            rt.key[i]=n.key[MID+i];
+        }
+        //store the last ref of n (pointer to next leaf)
+        Node nextInLine =(Node) n.ref[ORDER-1];
+        //insert <K,V> to the correct place
+        if (key.compareTo(n.key[n.nKeys-1])<=0) {//insert into n
+            boolean inserted = false;
+            for (int i = 0; i < n.nKeys; i++) {
+                K k_i = n.key [i];
+                if (key.compareTo (k_i) < 0) {//the position to insert
+                    wedgeL (key, ref, n, i);//wedge the leafnode n to add <key,ref>
+                    inserted = true;
+                    break;
+                } // if
+            } // for
+            if (! inserted) wedgeL (key, ref, n, n.nKeys);//'wedge' to the right
+        } else {//insert into rt
+            boolean inserted = false;
+            for (int i = 0; i < rt.nKeys; i++) {
+                K k_i = rt.key [i];
+                if (key.compareTo (k_i) < 0) {//the position to insert
+                    wedgeL (key, ref, rt, i);//wedge the leafnode n to add <key,ref>
+                    inserted = true;
+                    break;
+                } // if
+            } // for
+            if (! inserted) wedgeL (key, ref, rt, rt.nKeys);//'wedge' to the right
+        }
+        //handle the tail pointer pointing to next leaf
+        rt.ref[rt.nKeys]=nextInLine;//let rf points to the original next leaf
+        n.ref[n.nKeys]=rt;//let n points to rf as n's next leaf
+        // IMPLIMENTATION DONE
+        return rt;
+    } // splitL
+
+    /********************************************************************************
+     * Split internal node n and return the newly created right sibling node rt.
+     * Split first (MID keys for node n and MID-1 for node rt), then add the new key and ref.
+     * @param key  the new key to insert
+     * @param ref  the new value/node to insert
+     * @param n    the current node
+     * @return  the right sibling node (may wish to provide more information)
+     */
+    private Node splitI (K key, Node ref, Node n){
+        Node rt = new Node (ORDER, false);
+        //  T O   B E   I M P L E M E N T E D
+        K[] keys = (K[]) new Comparable[ORDER];//5
+        Object[] refs = new Object[ORDER+1];//6
+        //locate the correct place for key
+        int i=0;
+        for (;i<ORDER-1 && n.key[i].compareTo(key)<0; i++) {
+            keys[i] = n.key[i];
+            refs[i] = (Node) n.ref[i];
+        }
+        refs[i] = (Node) n.ref[i];
+        keys[i] = key;
+        refs[i+1] = ref;
+        i++;
+        for (; i<=n.nKeys; i++) {
+            keys[i] = n.key[i-1];
+            refs[i+1] = (Node) n.ref[i];
+        }
+        //insert key into n or rt, according to its location
+        n.nKeys = MID;
+        rt.nKeys = MID;
+        for (i=0; i<=MID; i++) {
+            n.key[i] = keys[i];
+            n.ref[i] = refs[i];
+        }
+        for (int j=0; j<=MID; j++, i++) {
+            if (j<MID) rt.key[j] = keys[i];
+            rt.ref[j] = refs[i];
+        }
+        //MID key is hidden in n at position n.key[n.nKeys].
+        return rt;
+    } // splitI // insert
 
     /********************************************************************************
      * Make a new root, linking to left and right child node, separated by a divider key.
