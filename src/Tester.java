@@ -27,7 +27,7 @@ public class Tester {
             duration /= 1000000.0;
             System.out.println("Point Select (TableScan) took " + duration + " milliseconds to complete.\n\n\n");
 
-//            for(int i = 0; i < 4; i++){
+            //Test Point select
             begin = System.nanoTime();
             tempTable = tables[0].select(new KeyType(id));
             end = System.nanoTime();
@@ -52,6 +52,7 @@ public class Tester {
             duration /= 1000000.0;
             System.out.print("Index join took " + duration + " milliseconds to complete.\n");
 
+            //Test Range Select
             begin = System.nanoTime();
 
 //                if(tables[0].mType == Table.MapType.BPTREE_MAP)
@@ -70,7 +71,7 @@ public class Tester {
         System.out.println("\n___________Round of Testing Complete___________\n\n");
     }
 
-}
+
 
     /*************************************************************************************
      * The main method is the driver for TestGenerator.
@@ -118,15 +119,21 @@ public class Tester {
 
         Comparable[][][] resultTest = test.generate(tups);
 
-        for (int i = 0; i < resultTest.length; i++) {
-            out.println(tables[i]);
-            for (int j = 0; j < resultTest[i].length; j++) {
-                for (int k = 0; k < resultTest[i][j].length; k++) {
-                    out.print(resultTest[i][j][k] + ",");
-                } // for
-                out.println();
-            } // for
-            out.println();
-        } // for
+        Table[] retTables = new Table[2];
+        retTables[0] = new Table("Professor",
+                "id name deptId",
+                "Integer String String",
+                "id");
+        for (int i = 0; i < resultTest[1].length; i++) {
+            retTables[0].insert(resultTest[1][i]);
+        }
+        retTables[1] = new Table("Teaching",
+                "crsCode semester profId",
+                "String String Integer",
+                "crcCode semester");
+        for (int i = 0; i < resultTest[1].length; i++) {
+            retTables[1].insert(resultTest[3][i]);
+        }
+        return retTables;
     }
 }

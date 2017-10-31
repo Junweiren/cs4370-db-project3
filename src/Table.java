@@ -397,7 +397,7 @@ public class Table
         for(int i = 0; i < this.tuples.size(); i++){
             Comparable[] currentTuple = tuples.get(i);
             Comparable[] foreignKeys = extract(currentTuple, t_attrs);
-            if (t2Index.containsKey(new KeyType(foreignKeys))) {
+            if (t2Index.get(new KeyType(foreignKeys)) != null) {
                 out.println("contains key: " + foreignKeys.toString());
                 rows.add(ArrayUtil.concat(tuples.get(i), t2Index.get(new KeyType(foreignKeys))));
             }
