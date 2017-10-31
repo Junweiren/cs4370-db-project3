@@ -65,10 +65,27 @@ public class Table
      */
     private enum MapType { NO_MAP, TREE_MAP, LINHASH_MAP, BPTREE_MAP }
 
+    public static void setmType(int mapid) {
+        switch (mapid) {
+            case 0:
+                mType = MapType.NO_MAP;
+                break;
+        case 1:
+                mType = MapType.TREE_MAP;
+                break;
+        case 2:
+                mType = MapType.LINHASH_MAP;
+                break;
+        case 3:
+                mType = MapType.BPTREE_MAP;
+                break;
+        }
+    }
+
     /** The map type to be used for indices.  Change as needed.
      */
 //    private static final MapType mType = MapType.TREE_MAP;
-    private static final MapType mType = MapType.BPTREE_MAP;
+    private static  MapType mType = MapType.BPTREE_MAP;
 //    private static final MapType mType = MapType.LINHASH_MAP;
 
     /************************************************************************************
@@ -218,8 +235,7 @@ public class Table
      */
     public Table seq_select (Predicate <Comparable []> predicate)
     {
-        out.println ("RA> " + name + ".select (" + predicate + ")");
-
+        out.println ("RA> " + name + ".select (" + predicate+ ")");
         return new Table (name + count++, attribute, domain, key,
                    tuples.stream ().filter (t -> predicate.test (t))
                                    .collect (Collectors.toList ()));
@@ -238,9 +254,12 @@ public class Table
 
         List <Comparable []> rows = new ArrayList <> ();
 
-        //  T O   B E   I M P L E M E N T E D
-        //TODO select command COMPLETED
-        rows.add(index.get(keyVal));
+        for (KeyType keyType: index.keySet()) {
+            if (keyType.compareTo(keyVal) == 0) {
+                rows.add(index.get(keyVal));
+                break;
+            }
+        }
         return new Table (name + count++, attribute, domain, key, rows);
     } // select
 
