@@ -449,7 +449,7 @@ public class Table
             for(int i = 0; i < tuples.size(); i++) {    //for each rows in table1, compare it with
                 Comparable[] currentTuple = tuples.get(i);
                 Comparable[] foreignKeys = extract(currentTuple, t_attrs);
-                if (commonAttrMap.containsKey(new KeyType(foreignKeys))) {
+                if (commonAttrMap.get(new KeyType(foreignKeys)) != null) {
                     out.println("contains key: " + foreignKeys.toString());
                     rows.add(ArrayUtil.concat(tuples.get(i), commonAttrMap.get(new KeyType(foreignKeys))));
                 }
