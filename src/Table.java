@@ -208,6 +208,41 @@ public class Table
         rows.add(index.get(keyVal));
         return new Table (name + count++, attribute, domain, key, rows);
     } // select
+  /************************************************************************************
+     * Select the tuples satisfying the given predicate (Boolean function).
+     *
+     * #usage movie.select (t -> t[movie.col("year")].equals (1977))
+     *
+     * @param predicate  the check condition for tuples
+     * @return  a table with tuples satisfying the predicate
+     */
+    public Table seq_select (Predicate <Comparable []> predicate)
+    {
+        out.println ("RA> " + name + ".select (" + predicate + ")");
+
+        return new Table (name + count++, attribute, domain, key,
+                   tuples.stream ().filter (t -> predicate.test (t))
+                                   .collect (Collectors.toList ()));
+    } // select
+
+    /************************************************************************************
+     * Select the tuples satisfying the given key predicate (key = value).  Use an index
+     * (Map) to retrieve the tuple with the given key value.
+     *
+     * @param keyVal  the given key value
+     * @return  a table with the tuple satisfying the key predicate
+     */
+    public Table seq_select (KeyType keyVal)
+    {
+        out.println ("RA> " + name + ".select (" + keyVal + ")");
+
+        List <Comparable []> rows = new ArrayList <> ();
+
+        //  T O   B E   I M P L E M E N T E D
+        //TODO select command COMPLETED
+        rows.add(index.get(keyVal));
+        return new Table (name + count++, attribute, domain, key, rows);
+    } // select
 
     /************************************************************************************
      * Union this table and table2.  Check that the two tables are compatible.
@@ -333,7 +368,6 @@ public class Table
         int attIndex1 = -1;
         int attIndex2 = -1;
         Map <KeyType, Comparable []> firstIndex = index;
-        Map <KeyType, Comparable []> secondIndex = table2.index;
         for(String att: this.attribute){
             if(att.equals(attributes1)){
                 attIndex1 = counter;
@@ -389,7 +423,7 @@ public class Table
 
 //            Table smallTable = (this.tuples.size() > table2.tuples.size())? table2 : this;
 //            String[]  smallTableAttrs = (this.tuples.size() > table2.tuples.size())? u_attrs : t_attrs;
-            Map<KeyType, Comparable[]> commonAttrMap = makeMap();
+            HashMap<KeyType, Comparable[]> commonAttrMap = new HashMap<>();
 
             for(int i=0; i < table2.tuples.size(); i++ ) {
                 Comparable[] currentTuple = table2.tuples.get(i);
