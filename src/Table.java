@@ -59,34 +59,24 @@ public class Table
 
     /** Index into tuples (maps key to tuple number).
      */
-    private final Map <KeyType, Comparable []> index;
+    public final Map <KeyType, Comparable []> index;
 
     /** The supported map types.
      */
-    private enum MapType { NO_MAP, TREE_MAP, LINHASH_MAP, BPTREE_MAP }
-
-    public static void setmType(int mapid) {
-        switch (mapid) {
-            case 0:
-                mType = MapType.NO_MAP;
-                break;
-        case 1:
-                mType = MapType.TREE_MAP;
-                break;
-        case 2:
-                mType = MapType.LINHASH_MAP;
-                break;
-        case 3:
-                mType = MapType.BPTREE_MAP;
-                break;
-        }
-    }
+    public enum MapType { NO_MAP, TREE_MAP, LINHASH_MAP, BPTREE_MAP }
 
     /** The map type to be used for indices.  Change as needed.
      */
-//    private static final MapType mType = MapType.TREE_MAP;
-    private static  MapType mType = MapType.BPTREE_MAP;
+//    public static final MapType mType = MapType.TREE_MAP;
+    private static final MapType mType = MapType.BPTREE_MAP;
 //    private static final MapType mType = MapType.LINHASH_MAP;
+
+    public List<Comparable[]> getTuple() {
+        return tuples;
+    }
+    public Comparable[] getTuple(int index) {
+        return tuples.get(index);
+    }
 
     /************************************************************************************
      * Make a map (index) given the MapType.
@@ -233,12 +223,20 @@ public class Table
      * @param predicate  the check condition for tuples
      * @return  a table with tuples satisfying the predicate
      */
-    public Table seq_select (Predicate <Comparable []> predicate)
+    public Table index_select (Predicate <Comparable []> predicate)
     {
-        out.println ("RA> " + name + ".select (" + predicate+ ")");
-        return new Table (name + count++, attribute, domain, key,
-                   tuples.stream ().filter (t -> predicate.test (t))
-                                   .collect (Collectors.toList ()));
+//        out.println ("RA> " + name + ".select (" + predicate + ")");
+        out.println(predicate + " pred");
+        List <Comparable []> rows = new ArrayList <> ();
+        for (KeyType Key : index.keySet())
+        {
+            if (predicate.test((Comparable []) Key.key))
+            {
+               rows.add(index.get(Key));
+            }
+        }
+
+        return new Table (name + count++, attribute, domain, key, rows);
     } // select
 
     /************************************************************************************
@@ -382,34 +380,31 @@ public class Table
      */
     public Table i_join (String attributes1, String attributes2, Table table2)
     {
-        List <Comparable []> rows = new ArrayList <> ();
-        int counter = 0;
-        int attIndex1 = -1;
-        int attIndex2 = -1;
-        Map <KeyType, Comparable []> firstIndex = index;
-        for(String att: this.attribute){
-            if(att.equals(attributes1)){
-                attIndex1 = counter;
-                counter = 0;
-                break;
-            }
-            counter++;
-        }
-        for(String att: table2.attribute){
-            if(att.equals(attributes2)){
-                attIndex2 = counter;
-                break;
-            }
-            counter++;
-        }
+        out.println ("RA> " + name + ".h_join (" + attributes1 + ", " + attributes2 + ", "
+                + table2.name + ")");
 
-        for (KeyType key : index.keySet())
-        {
-            Comparable [] tuple = firstIndex.get(key);
-            for(int i = 0; i < table2.tuples.size(); i++){
-                if(tuple[attIndex1].equals(table2.tuples.get(i)[attIndex2])){
-                    rows.add(ArrayUtil.concat(tuple, table2.tuples.get(i)));
-                }
+        String [] t_attrs = attributes1.split (" ");
+        String [] u_attrs = attributes2.split (" ");
+        List <Comparable []> rows = new ArrayList <> ();
+        //  T O   B E   I M P L E M E N T E D
+        //TODO h_join command
+
+        int[] cols1 = match(t_attrs);
+        int[] cols2 = table2.match(u_attrs);
+
+        Map <KeyType, Comparable []> t2Index = table2.index;
+
+        for(int i = 0; i < this.tuples.size(); i++){
+            Comparable[] currentTuple = tuples.get(i);
+            Comparable[] foreignKeys = extract(currentTuple, t_attrs);
+            if (t2Index.containsKey(new KeyType(foreignKeys))) {
+                out.println("contains key: " + foreignKeys.toString());
+                rows.add(ArrayUtil.concat(tuples.get(i), t2Index.get(new KeyType(foreignKeys))));
+            }
+        }
+        for (int i = 0; i < cols2.length; i++) {
+            if (table2.attribute[cols2[i]].equals(attribute[cols1[i]])) {
+                table2.attribute[cols2[i]] = table2.attribute[cols2[i]] + "2";
             }
         }
         return new Table (name + count++, ArrayUtil.concat (attribute, table2.attribute),

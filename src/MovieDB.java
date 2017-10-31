@@ -144,6 +144,26 @@ class MovieDB
         Table t_join2 = movie.join (cinema);
         t_join2.print ();
 
+        //------------i join
+        out.println ();
+        Table i_join = movie.i_join ("studioName", "name", studio);
+        i_join.print ();
+
+        //
+//        out.println ();
+//        Table i_select2 = movie.index_select (t -> t[movie.col("title")].equals ("Star_Wars") &&
+//                t[movie.col("year")].equals (1977));
+//        i_select2.print ();
+        //
+        out.println ();
+        Table i_select3 = movie.index_select (t ->
+                t[movie.col("year")].equals (1978));
+        i_select3.print ();
+
+//        out.println ();
+//        Table i_select3 = movie.index_select (t -> t[movie.col("length")].equals ("124"));
+//        i_select3.print ();
+
     } // main
 
 } // MovieDB class
