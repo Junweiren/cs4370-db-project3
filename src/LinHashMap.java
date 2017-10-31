@@ -165,10 +165,10 @@ public class LinHashMap <K, V>
     public V put (K key, V value)
     {
         int i = h (key);
-        out.println ("LinearHashMap.put: key = " + key + ", h() = " + i + ", value = " + value);
+//        out.println ("LinearHashMap.put: key = " + key + ", h() = " + i + ", value = " + value);
         if(i < split) // to check if a split has been made on the bucket
             i = h2(key);
-        out.println ("LinearHashMap.put: key = " + key + ", h() = " + i + ", value = " + value); 
+//        out.println ("LinearHashMap.put: key = " + key + ", h() = " + i + ", value = " + value);
         if(!containsKey(key)) {  
             Bucket bucket = hTable.get(i);
             if (bucket.nKeys < SLOTS) {

@@ -9,8 +9,8 @@ public class Tester {
         Table tempTable;
 
         //Begin testing!
-        for (int i = 500; i < 15001; i *= 2) {
-            System.out.println("Tuples: " + i);
+        for (int i = 1000; i <= 10000; i += 1000) {
+            System.out.println("---------------Start esting with tuple size: " + i + "---------------");
             Table tables[] = TestTupleGenerator(i);
 
             int id = (int) tables[0].getTuple(i / 2)[0];
@@ -25,7 +25,7 @@ public class Tester {
             }
             duration = end - begin;
             duration /= 1000000.0;
-            System.out.println("Point Select (TableScan) took " + duration + " milliseconds to complete.\n\n\n");
+            System.out.println("Point Select (Sequential) took " + duration + " milliseconds to complete.");
 
             //Test Point select
             begin = System.nanoTime();
@@ -33,39 +33,46 @@ public class Tester {
             end = System.nanoTime();
             duration = end - begin;
             duration /= 1000000.0;
-            System.out.print("Point select took " + duration + " milliseconds to complete.\n");
+            System.out.println("Point select took " + duration + " milliseconds to complete.");
 
-            System.out.print("\n");
 
             //Test NestedLoopJoin
             begin = System.nanoTime();
-            Table temp = tables[0].join("id", "profId", tables[1]);
+            Table temp = tables[1].join("profId", "id", tables[0]);
             end = System.nanoTime();
             duration = (end - begin) / 1000000.0;
             System.out.println("Join (Nested Loop Join) took " + duration + " milliseconds to complete.");
 
             //Test IndexJoin
             begin = System.nanoTime();
-            temp = tables[0].i_join("id", "profId", tables[1]);
+            tempTable = tables[1].i_join("profId", "id", tables[0]);
             end = System.nanoTime();
             duration = end - begin;
             duration /= 1000000.0;
-            System.out.print("Index join took " + duration + " milliseconds to complete.\n");
+            System.out.println("Index join took " + duration + " milliseconds to complete.");
 
-            //Test Range Select
+            //Test Sequential Range Select
             begin = System.nanoTime();
 
-//                if(tables[0].mType == Table.MapType.BPTREE_MAP)
-//                    ((BpTreeMap<> bpmap )tables[0].index)
-//                            .subMap(new KeyType(id), new KeyType(id2)).entrySet().forEach(e -> e.getValue());
-//                else
             tempTable = tables[0].select(t -> t[0].compareTo(id) >= 0 && t[0].compareTo(id2) <= 0);
 
             end = System.nanoTime();
             duration = (end - begin);
             duration /= 1000000.0;
 
-            System.out.print("Range select took " + duration + " milliseconds to complete.");
+            System.out.println("Sequential Range select took " + duration + " milliseconds to complete.");
+
+            //Test Range Select
+            begin = System.nanoTime();
+            tempTable = tables[0].index_select(t -> t[0].compareTo(id) >= 0 && t[0].compareTo(id2) <= 0);
+
+            end = System.nanoTime();
+            duration = (end - begin);
+            duration /= 1000000.0;
+
+            System.out.println("Range select took " + duration + " milliseconds to complete.");
+            System.out.println("---------------Finish testing with tuple size: " + i + "---------------\n\n\n\n");
+
         }//for
 
         System.out.println("\n___________Round of Testing Complete___________\n\n");
@@ -122,16 +129,16 @@ public class Tester {
         Table[] retTables = new Table[2];
         retTables[0] = new Table("Professor",
                 "id name deptId",
-                "Integer Integer Integer",
+                "Integer String String",
                 "id");
         for (int i = 0; i < resultTest[1].length; i++) {
             retTables[0].insert(resultTest[1][i]);
         }
         retTables[1] = new Table("Teaching",
                 "crsCode semester profId",
-                "Integer Integer Integer",
+                "String String Integer",
                 "crsCode semester");
-        for (int i = 0; i < resultTest[1].length; i++) {
+        for (int i = 0; i < resultTest[3].length; i++) {
             retTables[1].insert(resultTest[3][i]);
         }
         return retTables;

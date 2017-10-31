@@ -67,8 +67,8 @@ public class Table
 
     /** The map type to be used for indices.  Change as needed.
      */
-//    public static final MapType mType = MapType.TREE_MAP;
-    private static final MapType mType = MapType.BPTREE_MAP;
+    public static final MapType mType = MapType.TREE_MAP;
+//    private static final MapType mType = MapType.BPTREE_MAP;
 //    private static final MapType mType = MapType.LINHASH_MAP;
 
     public List<Comparable[]> getTuple() {
@@ -146,7 +146,7 @@ public class Table
     {
         this (_name, attributes.split (" "), findClass (domains.split (" ")), _key.split(" "));
 
-        out.println ("DDL> create table " + name + " (" + attributes + ")");
+//        out.println ("DDL> create table " + name + " (" + attributes + ")");
     } // constructor
 
     //----------------------------------------------------------------------------------
@@ -190,7 +190,7 @@ public class Table
      */
     public Table select (Predicate <Comparable []> predicate)
     {
-        out.println ("RA> " + name + ".select (" + predicate + ")");
+//        out.println ("RA> " + name + ".select (" + predicate + ")");
 
         return new Table (name + count++, attribute, domain, key,
                    tuples.stream ().filter (t -> predicate.test (t))
@@ -206,7 +206,7 @@ public class Table
      */
     public Table select (KeyType keyVal)
     {
-        out.println ("RA> " + name + ".select (" + keyVal + ")");
+//        out.println ("RA> " + name + ".select (" + keyVal + ")");
 
         List <Comparable []> rows = new ArrayList <> ();
 
@@ -226,7 +226,7 @@ public class Table
     public Table index_select (Predicate <Comparable []> predicate)
     {
 //        out.println ("RA> " + name + ".select (" + predicate + ")");
-        out.println(predicate + " pred");
+//        out.println(predicate + " pred");
         List <Comparable []> rows = new ArrayList <> ();
         for (KeyType Key : index.keySet())
         {
@@ -248,7 +248,7 @@ public class Table
      */
     public Table seq_select (KeyType keyVal)
     {
-        out.println ("RA> " + name + ".select (" + keyVal + ")");
+//        out.println ("RA> " + name + ".select (" + keyVal + ")");
 
         List <Comparable []> rows = new ArrayList <> ();
 
@@ -335,8 +335,8 @@ public class Table
      */
     public Table join (String attributes1, String attributes2, Table table2)
     {
-        out.println ("RA> " + name + ".join (" + attributes1 + ", " + attributes2 + ", "
-                                               + table2.name + ")");
+//        out.println ("RA> " + name + ".join (" + attributes1 + ", " + attributes2 + ", "
+//                                               + table2.name + ")");
 
         String [] t_attrs = attributes1.split (" ");
         String [] u_attrs = attributes2.split (" ");
@@ -380,8 +380,8 @@ public class Table
      */
     public Table i_join (String attributes1, String attributes2, Table table2)
     {
-        out.println ("RA> " + name + ".h_join (" + attributes1 + ", " + attributes2 + ", "
-                + table2.name + ")");
+//        out.println ("RA> " + name + ".i_join (" + attributes1 + ", " + attributes2 + ", "
+//                + table2.name + ")");
 
         String [] t_attrs = attributes1.split (" ");
         String [] u_attrs = attributes2.split (" ");
@@ -398,7 +398,7 @@ public class Table
             Comparable[] currentTuple = tuples.get(i);
             Comparable[] foreignKeys = extract(currentTuple, t_attrs);
             if (t2Index.get(new KeyType(foreignKeys)) != null) {
-                out.println("contains key: " + foreignKeys.toString());
+//                out.println("contains key: " + foreignKeys.toString());
                 rows.add(ArrayUtil.concat(tuples.get(i), t2Index.get(new KeyType(foreignKeys))));
             }
         }
@@ -423,8 +423,8 @@ public class Table
     public Table h_join (String attributes1, String attributes2, Table table2)
     {
         {
-            out.println ("RA> " + name + ".h_join (" + attributes1 + ", " + attributes2 + ", "
-                    + table2.name + ")");
+//            out.println ("RA> " + name + ".h_join (" + attributes1 + ", " + attributes2 + ", "
+//                    + table2.name + ")");
 
             String [] t_attrs = attributes1.split (" ");
             String [] u_attrs = attributes2.split (" ");
@@ -450,7 +450,7 @@ public class Table
                 Comparable[] currentTuple = tuples.get(i);
                 Comparable[] foreignKeys = extract(currentTuple, t_attrs);
                 if (commonAttrMap.get(new KeyType(foreignKeys)) != null) {
-                    out.println("contains key: " + foreignKeys.toString());
+//                    out.println("contains key: " + foreignKeys.toString());
                     rows.add(ArrayUtil.concat(tuples.get(i), commonAttrMap.get(new KeyType(foreignKeys))));
                 }
             }
@@ -477,7 +477,7 @@ public class Table
      */
     public Table join (Table table2)
     {
-        out.println ("RA> " + name + ".join (" + table2.name + ")");
+//        out.println ("RA> " + name + ".join (" + table2.name + ")");
 
         List <Comparable []> rows = new ArrayList <> ();
 
@@ -552,7 +552,7 @@ public class Table
      */
     public boolean insert (Comparable [] tup)
     {
-        out.println ("DML> insert into " + name + " values ( " + Arrays.toString (tup) + " )");
+//        out.println ("DML> insert into " + name + " values ( " + Arrays.toString (tup) + " )");
 
         if (typeCheck (tup)) {
             tuples.add (tup);

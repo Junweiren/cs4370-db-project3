@@ -1,0 +1,86 @@
+---------------Start esting with tuple size: 1000---------------
+Point select took 0.12439 milliseconds to complete.
+Index join took 6.444057 milliseconds to complete.
+Range select took 136.780509 milliseconds to complete.
+---------------Finish testing with tuple size: 1000---------------
+
+
+
+
+---------------Start esting with tuple size: 2000---------------
+Point select took 0.087032 milliseconds to complete.
+Index join took 6.125898 milliseconds to complete.
+Range select took 0.446244 milliseconds to complete.
+---------------Finish testing with tuple size: 2000---------------
+
+
+
+
+---------------Start esting with tuple size: 3000---------------
+Point select took 0.021758 milliseconds to complete.
+Index join took 8.497927 milliseconds to complete.
+Range select took 1.374448 milliseconds to complete.
+---------------Finish testing with tuple size: 3000---------------
+
+
+
+
+---------------Start esting with tuple size: 4000---------------
+Point select took 0.06199 milliseconds to complete.
+Index join took 13.365146 milliseconds to complete.
+Range select took 0.888793 milliseconds to complete.
+---------------Finish testing with tuple size: 4000---------------
+
+
+
+
+---------------Start esting with tuple size: 5000---------------
+Point select took 0.045979 milliseconds to complete.
+Index join took 12.836797 milliseconds to complete.
+Range select took 1.231173 milliseconds to complete.
+---------------Finish testing with tuple size: 5000---------------
+
+
+
+
+---------------Start esting with tuple size: 6000---------------
+Point select took 0.032432 milliseconds to complete.
+Index join took 25.91211 milliseconds to complete.
+Range select took 0.710624 milliseconds to complete.
+---------------Finish testing with tuple size: 6000---------------
+
+
+
+
+---------------Start esting with tuple size: 7000---------------
+Point select took 0.024222 milliseconds to complete.
+Index join took 11.429918 milliseconds to complete.
+Range select took 0.585823 milliseconds to complete.
+---------------Finish testing with tuple size: 7000---------------
+
+
+
+
+---------------Start esting with tuple size: 8000---------------
+Point select took 0.026684 milliseconds to complete.
+Index join took 12.790818 milliseconds to complete.
+Range select took 0.588697 milliseconds to complete.
+---------------Finish testing with tuple size: 8000---------------
+
+
+
+
+---------------Start esting with tuple size: 9000---------------
+Point select took 0.044337 milliseconds to complete.
+Index join took 33.051601 milliseconds to complete.
+Range select took 2.275556 milliseconds to complete.
+---------------Finish testing with tuple size: 9000---------------
+
+
+
+
+---------------Start esting with tuple size: 10000---------------
+Point select took 0.072253 milliseconds to complete.
+Index join took 234.705783 milliseconds to complete.
+Range select took 5.647632 milliseconds to complete.
+---------------Finish testing with tuple size: 10000---------------

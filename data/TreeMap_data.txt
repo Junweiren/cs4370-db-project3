@@ -1,0 +1,116 @@
+---------------Start esting with tuple size: 1000---------------
+Point Select (Sequential) took 15.201848 milliseconds to complete.
+Point select took 0.112895 milliseconds to complete.
+Join (Nested Loop Join) took 76.244064 milliseconds to complete.
+Index join took 5.064682 milliseconds to complete.
+Sequential Range select took 139.203034 milliseconds to complete.
+Range select took 3.859784 milliseconds to complete.
+---------------Finish testing with tuple size: 1000---------------
+
+
+
+
+---------------Start esting with tuple size: 2000---------------
+Point Select (Sequential) took 0.310359 milliseconds to complete.
+Point select took 0.046389 milliseconds to complete.
+Join (Nested Loop Join) took 175.447311 milliseconds to complete.
+Index join took 4.277701 milliseconds to complete.
+Sequential Range select took 0.535329 milliseconds to complete.
+Range select took 1.713133 milliseconds to complete.
+---------------Finish testing with tuple size: 2000---------------
+
+
+
+
+---------------Start esting with tuple size: 3000---------------
+Point Select (Sequential) took 0.447065 milliseconds to complete.
+Point select took 0.016421 milliseconds to complete.
+Join (Nested Loop Join) took 321.954047 milliseconds to complete.
+Index join took 6.709257 milliseconds to complete.
+Sequential Range select took 5.979339 milliseconds to complete.
+Range select took 1.532911 milliseconds to complete.
+---------------Finish testing with tuple size: 3000---------------
+
+
+
+
+---------------Start esting with tuple size: 4000---------------
+Point Select (Sequential) took 0.619076 milliseconds to complete.
+Point select took 0.018884 milliseconds to complete.
+Join (Nested Loop Join) took 681.122039 milliseconds to complete.
+Index join took 6.908364 milliseconds to complete.
+Sequential Range select took 13.971906 milliseconds to complete.
+Range select took 2.495599 milliseconds to complete.
+---------------Finish testing with tuple size: 4000---------------
+
+
+
+
+---------------Start esting with tuple size: 5000---------------
+Point Select (Sequential) took 0.781645 milliseconds to complete.
+Point select took 0.015189 milliseconds to complete.
+Join (Nested Loop Join) took 547.570742 milliseconds to complete.
+Index join took 6.979796 milliseconds to complete.
+Sequential Range select took 0.495096 milliseconds to complete.
+Range select took 1.377321 milliseconds to complete.
+---------------Finish testing with tuple size: 5000---------------
+
+
+
+
+---------------Start esting with tuple size: 6000---------------
+Point Select (Sequential) took 0.757013 milliseconds to complete.
+Point select took 0.017242 milliseconds to complete.
+Join (Nested Loop Join) took 815.487412 milliseconds to complete.
+Index join took 15.243312 milliseconds to complete.
+Sequential Range select took 0.753729 milliseconds to complete.
+Range select took 2.220135 milliseconds to complete.
+---------------Finish testing with tuple size: 6000---------------
+
+
+
+
+---------------Start esting with tuple size: 7000---------------
+Point Select (Sequential) took 0.892488 milliseconds to complete.
+Point select took 0.016832 milliseconds to complete.
+Join (Nested Loop Join) took 813.9155 milliseconds to complete.
+Index join took 9.475395 milliseconds to complete.
+Sequential Range select took 0.735256 milliseconds to complete.
+Range select took 2.257493 milliseconds to complete.
+---------------Finish testing with tuple size: 7000---------------
+
+
+
+
+---------------Start esting with tuple size: 8000---------------
+Point Select (Sequential) took 1.020983 milliseconds to complete.
+Point select took 0.020526 milliseconds to complete.
+Join (Nested Loop Join) took 1084.641412 milliseconds to complete.
+Index join took 12.70707 milliseconds to complete.
+Sequential Range select took 0.795193 milliseconds to complete.
+Range select took 2.922549 milliseconds to complete.
+---------------Finish testing with tuple size: 8000---------------
+
+
+
+
+---------------Start esting with tuple size: 9000---------------
+Point Select (Sequential) took 0.903162 milliseconds to complete.
+Point select took 0.017653 milliseconds to complete.
+Join (Nested Loop Join) took 4305.857248 milliseconds to complete.
+Index join took 39.240721 milliseconds to complete.
+Sequential Range select took 2.201251 milliseconds to complete.
+Range select took 8.226158 milliseconds to complete.
+---------------Finish testing with tuple size: 9000---------------
+
+
+
+
+---------------Start esting with tuple size: 10000---------------
+Point Select (Sequential) took 2.795695 milliseconds to complete.
+Point select took 0.03079 milliseconds to complete.
+Join (Nested Loop Join) took 7109.047296 milliseconds to complete.
+Index join took 41.480151 milliseconds to complete.
+Sequential Range select took 2.362588 milliseconds to complete.
+Range select took 7.072164 milliseconds to complete.
+---------------Finish testing with tuple size: 10000---------------
