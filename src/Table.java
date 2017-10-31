@@ -67,8 +67,8 @@ public class Table
 
     /** The map type to be used for indices.  Change as needed.
      */
-    public static final MapType mType = MapType.TREE_MAP;
-//    private static final MapType mType = MapType.BPTREE_MAP;
+//    public static final MapType mType = MapType.TREE_MAP;
+    private static final MapType mType = MapType.BPTREE_MAP;
 //    private static final MapType mType = MapType.LINHASH_MAP;
 
     public List<Comparable[]> getTuple() {

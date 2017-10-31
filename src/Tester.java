@@ -26,51 +26,58 @@ public class Tester {
             duration = end - begin;
             duration /= 1000000.0;
             System.out.println("Point Select (Sequential) took " + duration + " milliseconds to complete.");
+//
+//            //Test Point select
+//            begin = System.nanoTime();
+//            tempTable = tables[0].select(new KeyType(id));
+//            end = System.nanoTime();
+//            duration = end - begin;
+//            duration /= 1000000.0;
+//            System.out.println("Point select took " + duration + " milliseconds to complete.");
+//
+//
+//            //Test NestedLoopJoin
+//            begin = System.nanoTime();
+//            Table temp = tables[1].join("profId", "id", tables[0]);
+//            end = System.nanoTime();
+//            duration = (end - begin) / 1000000.0;
+//            System.out.println("Join (Nested Loop Join) took " + duration + " milliseconds to complete.");
+//
+//            //Test IndexJoin
+//            begin = System.nanoTime();
+//            tempTable = tables[1].i_join("profId", "id", tables[0]);
+//            end = System.nanoTime();
+//            duration = end - begin;
+//            duration /= 1000000.0;
+//            System.out.println("Index join took " + duration + " milliseconds to complete.");
 
-            //Test Point select
-            begin = System.nanoTime();
-            tempTable = tables[0].select(new KeyType(id));
-            end = System.nanoTime();
-            duration = end - begin;
-            duration /= 1000000.0;
-            System.out.println("Point select took " + duration + " milliseconds to complete.");
+//            //Test HashJoin
+//            begin = System.nanoTime();
+//            tempTable = tables[1].h_join("profId", "id", tables[0]);
+//            end = System.nanoTime();
+//            duration = end - begin;
+//            duration /= 1000000.0;
+//            System.out.println("Hash join took " + duration + " milliseconds to complete.");
 
-
-            //Test NestedLoopJoin
-            begin = System.nanoTime();
-            Table temp = tables[1].join("profId", "id", tables[0]);
-            end = System.nanoTime();
-            duration = (end - begin) / 1000000.0;
-            System.out.println("Join (Nested Loop Join) took " + duration + " milliseconds to complete.");
-
-            //Test IndexJoin
-            begin = System.nanoTime();
-            tempTable = tables[1].i_join("profId", "id", tables[0]);
-            end = System.nanoTime();
-            duration = end - begin;
-            duration /= 1000000.0;
-            System.out.println("Index join took " + duration + " milliseconds to complete.");
-
-            //Test Sequential Range Select
-            begin = System.nanoTime();
-
-            tempTable = tables[0].select(t -> t[0].compareTo(id) >= 0 && t[0].compareTo(id2) <= 0);
-
-            end = System.nanoTime();
-            duration = (end - begin);
-            duration /= 1000000.0;
-
-            System.out.println("Sequential Range select took " + duration + " milliseconds to complete.");
-
-            //Test Range Select
-            begin = System.nanoTime();
-            tempTable = tables[0].index_select(t -> t[0].compareTo(id) >= 0 && t[0].compareTo(id2) <= 0);
-
-            end = System.nanoTime();
-            duration = (end - begin);
-            duration /= 1000000.0;
-
-            System.out.println("Range select took " + duration + " milliseconds to complete.");
+//            //Test Sequential Range Select
+//            begin = System.nanoTime();
+//            tempTable = tables[0].select(t -> t[0].compareTo(id) >= 0 && t[0].compareTo(id2) <= 0);
+//
+//            end = System.nanoTime();
+//            duration = (end - begin);
+//            duration /= 1000000.0;
+//
+//            System.out.println("Sequential Range select took " + duration + " milliseconds to complete.");
+//
+//            //Test Range Select
+//            begin = System.nanoTime();
+//            tempTable = tables[0].index_select(t -> t[0].compareTo(id) >= 0 && t[0].compareTo(id2) <= 0);
+//
+//            end = System.nanoTime();
+//            duration = (end - begin);
+//            duration /= 1000000.0;
+//
+//            System.out.println("Range select took " + duration + " milliseconds to complete.");
             System.out.println("---------------Finish testing with tuple size: " + i + "---------------\n\n\n\n");
 
         }//for
