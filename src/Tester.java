@@ -39,14 +39,14 @@ public class Tester {
 
             //Test NestedLoopJoin
             begin = System.nanoTime();
-            Table temp = tables[0].join("id", "studId", tables[1]);
+            Table temp = tables[0].join("id", "profId", tables[1]);
             end = System.nanoTime();
             duration = (end - begin) / 1000000.0;
             System.out.println("Join (Nested Loop Join) took " + duration + " milliseconds to complete.");
 
             //Test IndexJoin
             begin = System.nanoTime();
-            temp = tables[0].i_join("id", "studId", tables[1]);
+            temp = tables[0].i_join("id", "profId", tables[1]);
             end = System.nanoTime();
             duration = end - begin;
             duration /= 1000000.0;
@@ -122,15 +122,15 @@ public class Tester {
         Table[] retTables = new Table[2];
         retTables[0] = new Table("Professor",
                 "id name deptId",
-                "Integer String String",
+                "Integer Integer Integer",
                 "id");
         for (int i = 0; i < resultTest[1].length; i++) {
             retTables[0].insert(resultTest[1][i]);
         }
         retTables[1] = new Table("Teaching",
                 "crsCode semester profId",
-                "String String Integer",
-                "crcCode semester");
+                "Integer Integer Integer",
+                "crsCode semester");
         for (int i = 0; i < resultTest[1].length; i++) {
             retTables[1].insert(resultTest[3][i]);
         }
